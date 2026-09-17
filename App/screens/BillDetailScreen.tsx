@@ -2,14 +2,13 @@ import React from 'react';
 import {
   Alert,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import type { RootStackScreenProps } from '../navigation/types';
-import { ScreenContainer } from '../Components';
+import { KeyboardAvoidingScrollView, ScreenContainer } from '../Components';
 import {
   useAppDispatch,
   useAppSelector,
@@ -69,9 +68,11 @@ export const BillDetailScreen: React.FC<RootStackScreenProps<'BillDetail'>> = ({
 
   return (
     <ScreenContainer>
-      <ScrollView
+      <KeyboardAvoidingScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
+        keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
       >
         {/* Header: <- Bill Details */}
         <View style={styles.headerRow}>
@@ -229,7 +230,7 @@ export const BillDetailScreen: React.FC<RootStackScreenProps<'BillDetail'>> = ({
         >
           <Text style={styles.deleteButtonText}>🗑️ Delete Bill</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAvoidingScrollView>
     </ScreenContainer>
   );
 };
@@ -240,6 +241,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0f172a',
   },
   contentContainer: {
+    flexGrow: 1,
     paddingHorizontal: 16,
     paddingBottom: 40,
   },

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Alert,
   Platform,
-  ScrollView,
   Share,
   StyleSheet,
   Text,
@@ -10,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import type { RootStackScreenProps } from '../navigation/types';
-import { ScreenContainer } from '../Components';
+import { KeyboardAvoidingScrollView, ScreenContainer } from '../Components';
 import {
   useAppDispatch,
   useAppSelector,
@@ -82,9 +81,11 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
 
   return (
     <ScreenContainer>
-      <ScrollView
+      <KeyboardAvoidingScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
+        keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
       >
         {/* Header matching wireframe: <- Goa Trip Results */}
         <View style={styles.headerRow}>
@@ -156,7 +157,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
           </View>
         </View>
 
-        {/* Section: Per Person Breakdown with [v] toggle */}
+        {/* Section: Per Person Breakdown with accordion toggle */}
         <View style={styles.section}>
           <TouchableOpacity
             style={styles.breakdownHeaderRow}
@@ -225,7 +226,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
           )}
         </View>
 
-        {/* Action Buttons matching wireframe: [ Mark All Settled ]   [ Share ] */}
+        {/* Action Buttons: Mark All Settled / Share */}
         <View style={styles.buttonActionRow}>
           <TouchableOpacity
             style={[
@@ -236,7 +237,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
             onPress={handleToggleSettled}
           >
             <Text style={styles.actionBtnText}>
-              {bill.isSettled ? '[ Mark As Unsettled ]' : '[ Mark All Settled ]'}
+              {bill.isSettled ? 'Mark As Unsettled' : 'Mark All Settled'}
             </Text>
           </TouchableOpacity>
 
@@ -259,7 +260,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
             📋 View Itemized Breakdown & Expenses →
           </Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAvoidingScrollView>
     </ScreenContainer>
   );
 };
@@ -270,6 +271,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0f172a',
   },
   contentContainer: {
+    flexGrow: 1,
     paddingHorizontal: 16,
     paddingBottom: 40,
   },

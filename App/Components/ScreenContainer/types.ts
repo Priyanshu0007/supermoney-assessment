@@ -54,4 +54,28 @@ export interface ScreenContainerProps {
    * Behavior for keyboard dismissal on scroll tap.
    */
   keyboardShouldPersistTaps?: 'always' | 'never' | 'handled';
+  /**
+   * When true, wraps children in KeyboardAvoidingScrollView.
+   * If both withKeyboardAvoidingView and withScrollView are enabled,
+   * KeyboardAvoidingScrollView takes precedence.
+   */
+  withKeyboardAvoidingView?: boolean;
+  /**
+   * Distance between the top of the user screen and the React Native view
+   * for keyboard avoiding calculation.
+   */
+  keyboardVerticalOffset?: number;
+  /**
+   * Behavior override for keyboard avoidance ('padding', 'height', 'position').
+   */
+  keyboardBehavior?: 'padding' | 'height' | 'position';
+  /**
+   * Dismiss mode for keyboard when dragging scroll content. Defaults to 'on-drag'.
+   */
+  keyboardDismissMode?: 'none' | 'on-drag' | 'interactive';
+  /**
+   * Controls whether iOS automatically adjusts the scroll view content insets
+   * when the software keyboard opens.
+   */
+  automaticallyAdjustKeyboardInsets?: boolean;
 }

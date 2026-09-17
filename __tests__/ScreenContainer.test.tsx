@@ -43,4 +43,20 @@ describe('ScreenContainer Component', () => {
 
     expect(tree.root.findByProps({ testID: 'no-safe-area-child' })).toBeDefined();
   });
+
+  it('renders with withKeyboardAvoidingView enabled', () => {
+    let tree: any;
+    ReactTestRenderer.act(() => {
+      tree = ReactTestRenderer.create(
+        <ScreenContainer withKeyboardAvoidingView keyboardVerticalOffset={15}>
+          <Text testID="keyboard-avoid-child">Keyboard Aware Content</Text>
+        </ScreenContainer>
+      );
+    });
+
+    expect(tree.root.findByProps({ testID: 'keyboard-avoid-child' })).toBeDefined();
+    expect(tree.root.findByProps({ testID: 'keyboard-avoid-child' }).props.children).toBe(
+      'Keyboard Aware Content'
+    );
+  });
 });

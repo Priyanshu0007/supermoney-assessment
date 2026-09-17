@@ -6,6 +6,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAvoidingScrollView } from '../KeyboardAvoidingScrollView';
 import type { ScreenContainerProps } from './types';
 
 const DEFAULT_EDGES = ['top', 'right', 'bottom', 'left'] as const;
@@ -22,12 +23,31 @@ export const ScreenContainer: React.FC<ScreenContainerProps> = ({
   statusBarColor,
   statusBarHidden = false,
   withScrollView = false,
+  withKeyboardAvoidingView = false,
+  keyboardVerticalOffset,
+  keyboardBehavior,
+  keyboardDismissMode = 'on-drag',
+  automaticallyAdjustKeyboardInsets,
   bounces = true,
   keyboardShouldPersistTaps = 'handled',
 }) => {
   const containerBgStyle = { backgroundColor };
 
-  const content = withScrollView ? (
+  const content = withKeyboardAvoidingView ? (
+    <KeyboardAvoidingScrollView
+      style={styles.scrollView}
+      contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
+      keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+      keyboardDismissMode={keyboardDismissMode}
+      keyboardVerticalOffset={keyboardVerticalOffset}
+      behavior={keyboardBehavior}
+      automaticallyAdjustKeyboardInsets={automaticallyAdjustKeyboardInsets}
+      bounces={bounces}
+      showsVerticalScrollIndicator={false}
+    >
+      {children}
+    </KeyboardAvoidingScrollView>
+  ) : withScrollView ? (
     <ScrollView
       style={styles.scrollView}
       contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
@@ -47,7 +67,7 @@ export const ScreenContainer: React.FC<ScreenContainerProps> = ({
     <>
       <StatusBar
         barStyle={statusBarStyle}
-        backgroundColor={statusBarColor || backgroundColor}
+        {...({ backgroundColor: statusBarColor || backgroundColor } as any)}
         hidden={statusBarHidden}
         translucent={false}
       />

@@ -88,7 +88,7 @@ export const BillListScreen: React.FC<RootStackScreenProps<'BillList'>> = ({
           </Text>
         </View>
 
-        {/* Status Row: Status Tag + [View] Button */}
+        {/* Status Row: Status Tag + View Button */}
         <View style={styles.actionRow}>
           <View
             style={[
@@ -145,7 +145,7 @@ export const BillListScreen: React.FC<RootStackScreenProps<'BillList'>> = ({
 
   return (
     <ScreenContainer style={styles.container}>
-      {/* Top Header matching wireframe: Split Bills        [+ New] */}
+      {/* Top Header: Split Bills and + New Button */}
       <View style={styles.header}>
         <View>
           <Text style={styles.headerTitle}>Split Bills</Text>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Alert,
-  KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
@@ -11,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import type { RootStackScreenProps } from '../navigation/types';
-import { ScreenContainer } from '../Components';
+import { KeyboardAvoidingScrollView, ScreenContainer } from '../Components';
 import {
   useAppDispatch,
   useAppSelector,
@@ -286,16 +285,15 @@ export const CreateBillScreen: React.FC<RootStackScreenProps<'CreateBill'>> = ({
 
   return (
     <ScreenContainer>
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoid}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      <KeyboardAvoidingScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}
-          keyboardShouldPersistTaps="handled"
-        >
-          {/* Header matching wireframe: <- New Bill */}
+        {/* Header matching wireframe: <- New Bill */}
           <View style={styles.headerRow}>
             <TouchableOpacity
               style={styles.backButton}
@@ -332,7 +330,7 @@ export const CreateBillScreen: React.FC<RootStackScreenProps<'CreateBill'>> = ({
                 activeOpacity={0.7}
                 onPress={() => setIsAddingPerson(true)}
               >
-                <Text style={styles.inlineActionText}>[+ Add Person]</Text>
+                <Text style={styles.inlineActionText}>+ Add Person</Text>
               </TouchableOpacity>
             </View>
 
@@ -408,7 +406,7 @@ export const CreateBillScreen: React.FC<RootStackScreenProps<'CreateBill'>> = ({
                 activeOpacity={0.7}
                 onPress={handleAddItem}
               >
-                <Text style={styles.inlineActionText}>[+ Add Item]</Text>
+                <Text style={styles.inlineActionText}>+ Add Item</Text>
               </TouchableOpacity>
             </View>
 
@@ -587,31 +585,28 @@ export const CreateBillScreen: React.FC<RootStackScreenProps<'CreateBill'>> = ({
             })}
           </View>
 
-          {/* Bottom Action: [ Calculate Split ] */}
+          {/* Bottom Action: Calculate Split */}
           <View style={styles.calculateBtnContainer}>
             <TouchableOpacity
               style={styles.calculateBtn}
               activeOpacity={0.8}
               onPress={handleCalculateSplit}
             >
-              <Text style={styles.calculateBtnText}>[ Calculate Split ]</Text>
+              <Text style={styles.calculateBtnText}>Calculate Split</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingScrollView>
     </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  keyboardAvoid: {
-    flex: 1,
-  },
   container: {
     flex: 1,
     backgroundColor: '#0f172a',
   },
   contentContainer: {
+    flexGrow: 1,
     paddingHorizontal: 16,
     paddingBottom: 40,
   },
