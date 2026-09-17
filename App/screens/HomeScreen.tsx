@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import type { RootStackScreenProps } from '../navigation/types';
+import { BottomSheet } from '../Components/BottomSheet';
 import {
   useAppDispatch,
   useAppSelector,
@@ -26,6 +29,15 @@ export const HomeScreen: React.FC<RootStackScreenProps<'Home'>> = ({
   const dispatch = useAppDispatch();
   const auth = useAppSelector(selectAuth);
   const counter = useAppSelector(selectCounter);
+
+  // BottomSheet showcase state
+  const [isFormSheetVisible, setIsFormSheetVisible] = useState(false);
+  const [isInfoSheetVisible, setIsInfoSheetVisible] = useState(false);
+
+  // Form sheet state
+  const [formTitle, setFormTitle] = useState('');
+  const [formCategory, setFormCategory] = useState<'Feedback' | 'Bug' | 'Feature'>('Feedback');
+  const [formNotes, setFormNotes] = useState('');
 
   const handleToggleAuth = () => {
     if (auth.isAuthenticated) {
@@ -179,6 +191,38 @@ export const HomeScreen: React.FC<RootStackScreenProps<'Home'>> = ({
         </View>
       </View>
 
+      {/* Bottom Sheet Component Showcase Card */}
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.cardTitle}>Custom Bottom Sheet</Text>
+          <View style={[styles.badge, styles.badgeBottomSheet]}>
+            <Text style={styles.badgeText}>ANIMATED MODAL</Text>
+          </View>
+        </View>
+
+        <Text style={styles.description}>
+          Built with React Native Modal, PanResponder drag-to-dismiss, spring animations, and robust keyboard avoidance.
+        </Text>
+
+        <View style={styles.sheetButtonRow}>
+          <TouchableOpacity
+            style={[styles.actionButton, styles.buttonPurple]}
+            activeOpacity={0.8}
+            onPress={() => setIsFormSheetVisible(true)}
+          >
+            <Text style={styles.actionButtonText}>📝 Test Keyboard Form Sheet</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.actionButton, styles.buttonTeal]}
+            activeOpacity={0.8}
+            onPress={() => setIsInfoSheetVisible(true)}
+          >
+            <Text style={styles.actionButtonText}>✨ View Features & Details</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       {/* Navigation Card */}
       <View style={styles.card}>
         <TouchableOpacity
@@ -189,6 +233,151 @@ export const HomeScreen: React.FC<RootStackScreenProps<'Home'>> = ({
           <Text style={styles.navButtonText}>Go to Details Screen →</Text>
         </TouchableOpacity>
       </View>
+
+      {/* 1. Form Bottom Sheet with Keyboard Handling */}
+      <BottomSheet
+        visible={isFormSheetVisible}
+        onClose={() => setIsFormSheetVisible(false)}
+        title="Submit Feedback"
+        subtitle="Test fluid keyboard avoiding & gesture dismiss"
+        footerComponent={
+          <View style={styles.sheetFooterRow}>
+            <TouchableOpacity
+              style={[styles.footerButton, styles.buttonSecondary]}
+              activeOpacity={0.8}
+              onPress={() => setIsFormSheetVisible(false)}
+            >
+              <Text style={styles.footerButtonText}>Cancel</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.footerButton, styles.buttonPrimary]}
+              activeOpacity={0.8}
+              onPress={() => {
+                Alert.alert(
+                  'Submitted Successfully',
+                  `Subject: ${formTitle || 'N/A'}\nCategory: ${formCategory}\nNotes: ${formNotes || 'N/A'}`
+                );
+                setIsFormSheetVisible(false);
+              }}
+            >
+              <Text style={styles.footerButtonText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        }
+      >
+        <View style={styles.formContainer}>
+          <Text style={styles.formLabel}>Category</Text>
+          <View style={styles.categoryRow}>
+            {(['Feedback', 'Bug', 'Feature'] as const).map((cat) => (
+              <TouchableOpacity
+                key={cat}
+                style={[
+                  styles.categoryChip,
+                  formCategory === cat && styles.categoryChipActive,
+                ]}
+                onPress={() => setFormCategory(cat)}
+              >
+                <Text
+                  style={[
+                    styles.categoryChipText,
+                    formCategory === cat && styles.categoryChipTextActive,
+                  ]}
+                >
+                  {cat}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <Text style={styles.formLabel}>Title / Subject</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="e.g. Smooth sheet animation feedback"
+            placeholderTextColor="#64748b"
+            value={formTitle}
+            onChangeText={setFormTitle}
+            returnKeyType="next"
+          />
+
+          <Text style={styles.formLabel}>Details / Message</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="Type your feedback here. Focus this field to see the sheet lift seamlessly above the software keyboard..."
+            placeholderTextColor="#64748b"
+            value={formNotes}
+            onChangeText={setFormNotes}
+            multiline
+            numberOfLines={4}
+            textAlignVertical="top"
+          />
+
+          <View style={styles.hintBox}>
+            <Text style={styles.hintText}>
+              💡 Tip: Notice how the sheet elevates smoothly without obscuring inputs. Drag down on the top bar or tap outside to dismiss.
+            </Text>
+          </View>
+        </View>
+      </BottomSheet>
+
+      {/* 2. Info / Details Bottom Sheet */}
+      <BottomSheet
+        visible={isInfoSheetVisible}
+        onClose={() => setIsInfoSheetVisible(false)}
+        title="Bottom Sheet Architecture"
+        subtitle="Built with pure React Native primitives"
+        footerComponent={
+          <TouchableOpacity
+            style={[styles.navButton, styles.fullWidthButton]}
+            activeOpacity={0.8}
+            onPress={() => setIsInfoSheetVisible(false)}
+          >
+            <Text style={styles.navButtonText}>Got it!</Text>
+          </TouchableOpacity>
+        }
+      >
+        <View style={styles.featureList}>
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>⚡</Text>
+            <View style={styles.featureTextCol}>
+              <Text style={styles.featureTitle}>Pure React Native Modal</Text>
+              <Text style={styles.featureDesc}>
+                Zero external dependencies. Works cross-platform with full status bar translucency and Android hardware back button support.
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>⌨️</Text>
+            <View style={styles.featureTextCol}>
+              <Text style={styles.featureTitle}>Smart Keyboard Handling</Text>
+              <Text style={styles.featureDesc}>
+                Listens to native keyboard show/hide events to dynamically adjust padding and safe area insets without leaving an awkward gap.
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>🖐️</Text>
+            <View style={styles.featureTextCol}>
+              <Text style={styles.featureTitle}>PanResponder Drag Gesture</Text>
+              <Text style={styles.featureDesc}>
+                1:1 real-time finger tracking on downward drags with velocity-aware dismiss and elastic rubber-band resistance when pulling upward.
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>🎨</Text>
+            <View style={styles.featureTextCol}>
+              <Text style={styles.featureTitle}>Spring Physics & Dim Backdrop</Text>
+              <Text style={styles.featureDesc}>
+                Natural bounciness on entry and smooth cubic deceleration on dismiss with animated backdrop fade.
+              </Text>
+            </View>
+          </View>
+        </View>
+      </BottomSheet>
     </ScrollView>
   );
 };
@@ -369,4 +558,147 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
+  badgeBottomSheet: {
+    backgroundColor: 'rgba(168, 85, 247, 0.2)',
+    borderWidth: 1,
+    borderColor: '#a855f7',
+  },
+  sheetButtonRow: {
+    gap: 10,
+    marginTop: 4,
+  },
+  actionButton: {
+    paddingVertical: 13,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonPurple: {
+    backgroundColor: '#8b5cf6',
+  },
+  buttonTeal: {
+    backgroundColor: '#0d9488',
+  },
+  actionButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  sheetFooterRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  footerButton: {
+    flex: 1,
+    paddingVertical: 13,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  footerButtonText: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  formContainer: {
+    paddingBottom: 8,
+  },
+  formLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#94a3b8',
+    marginBottom: 8,
+    marginTop: 4,
+  },
+  categoryRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 16,
+  },
+  categoryChip: {
+    paddingVertical: 7,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    backgroundColor: '#0f172a',
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  categoryChipActive: {
+    backgroundColor: 'rgba(59, 130, 246, 0.25)',
+    borderColor: '#3b82f6',
+  },
+  categoryChipText: {
+    fontSize: 13,
+    color: '#94a3b8',
+    fontWeight: '500',
+  },
+  categoryChipTextActive: {
+    color: '#38bdf8',
+    fontWeight: '700',
+  },
+  input: {
+    backgroundColor: '#0f172a',
+    borderWidth: 1,
+    borderColor: '#334155',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 14,
+    color: '#f8fafc',
+    marginBottom: 16,
+  },
+  textArea: {
+    height: 96,
+    textAlignVertical: 'top',
+  },
+  hintBox: {
+    backgroundColor: '#0f172a',
+    borderRadius: 10,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#1e293b',
+    marginTop: 4,
+  },
+  hintText: {
+    fontSize: 12,
+    color: '#64748b',
+    lineHeight: 18,
+  },
+  featureList: {
+    gap: 16,
+    paddingBottom: 8,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    backgroundColor: '#0f172a',
+    padding: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  featureIcon: {
+    fontSize: 22,
+    marginTop: 1,
+  },
+  featureTextCol: {
+    flex: 1,
+  },
+  featureTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#f8fafc',
+    marginBottom: 4,
+  },
+  featureDesc: {
+    fontSize: 13,
+    color: '#94a3b8',
+    lineHeight: 18,
+  },
+  fullWidthButton: {
+    width: '100%',
+  },
 });
+
