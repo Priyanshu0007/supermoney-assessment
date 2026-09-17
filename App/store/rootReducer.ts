@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistReducer, type PersistConfig } from 'redux-persist';
 import authReducer from './slices/auth/authSlice';
 import counterReducer from './slices/counter/counterSlice';
+import billsReducer from './slices/bills/billsSlice';
 
 /**
  * Root reducer combining all slice reducers in the application.
@@ -10,6 +11,7 @@ import counterReducer from './slices/counter/counterSlice';
 export const rootReducer = combineReducers({
   auth: authReducer,
   counter: counterReducer,
+  bills: billsReducer,
 });
 
 export type RootReducerState = ReturnType<typeof rootReducer>;

@@ -20,3 +20,4 @@ export type { RootState, AppDispatch, AppThunk, PersistSliceKey } from './types'
 // Slices, actions, and selectors
 export * from './slices/auth';
 export * from './slices/counter';
+export * from './slices/bills';

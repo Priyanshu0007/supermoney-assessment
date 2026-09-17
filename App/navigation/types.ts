@@ -10,6 +10,10 @@ export type RootStackParamList = {
     id: string;
     title: string;
   };
+  BillList: undefined;
+  CreateBill: { billId?: string } | undefined;
+  SplitResult: { billId: string };
+  BillDetail: { billId: string };
 };
 
 /**

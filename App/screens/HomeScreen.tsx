@@ -21,6 +21,7 @@ import {
   reset,
   selectAuth,
   selectCounter,
+  selectAllBills,
 } from '../store';
 
 export const HomeScreen: React.FC<RootStackScreenProps<'Home'>> = ({
@@ -29,6 +30,7 @@ export const HomeScreen: React.FC<RootStackScreenProps<'Home'>> = ({
   const dispatch = useAppDispatch();
   const auth = useAppSelector(selectAuth);
   const counter = useAppSelector(selectCounter);
+  const bills = useAppSelector(selectAllBills);
 
   // BottomSheet showcase state
   const [isFormSheetVisible, setIsFormSheetVisible] = useState(false);
@@ -61,6 +63,10 @@ export const HomeScreen: React.FC<RootStackScreenProps<'Home'>> = ({
       id: 'item-101',
       title: 'React Navigation Deep Dive',
     });
+  };
+
+  const handleNavigateToBillList = () => {
+    navigation.navigate('BillList');
   };
 
   return (
@@ -221,6 +227,47 @@ export const HomeScreen: React.FC<RootStackScreenProps<'Home'>> = ({
             <Text style={styles.actionButtonText}>✨ View Features & Details</Text>
           </TouchableOpacity>
         </View>
+      </View>
+
+      {/* Split Bills (Supermoney Assessment) Card */}
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.cardTitle}>Split Bills Feature</Text>
+          <View style={[styles.badge, styles.badgeSplitBills]}>
+            <Text style={styles.badgeText}>4 SCREENS</Text>
+          </View>
+        </View>
+
+        <Text style={styles.description}>
+          Complete 4-screen bill splitting system with Redux Toolkit persistence, equal & custom splits, shares validation, and settlement calculations.
+        </Text>
+
+        <View style={styles.billStatsRow}>
+          <View style={styles.billStatItem}>
+            <Text style={styles.billStatNumber}>{bills.length}</Text>
+            <Text style={styles.billStatLabel}>Bills</Text>
+          </View>
+          <View style={styles.billStatItem}>
+            <Text style={styles.billStatNumber}>
+              {bills.reduce((sum, b) => sum + (b.people?.length || 0), 0)}
+            </Text>
+            <Text style={styles.billStatLabel}>Participants</Text>
+          </View>
+          <View style={styles.billStatItem}>
+            <Text style={styles.billStatNumber}>
+              Rs.{bills.reduce((sum, b) => sum + b.totalAmount, 0).toLocaleString('en-IN')}
+            </Text>
+            <Text style={styles.billStatLabel}>Total Volume</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.button, styles.buttonEmerald]}
+          activeOpacity={0.8}
+          onPress={handleNavigateToBillList}
+        >
+          <Text style={styles.buttonText}>Open Split Bills Screen →</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Navigation Card */}
@@ -699,6 +746,38 @@ const styles = StyleSheet.create({
   },
   fullWidthButton: {
     width: '100%',
+  },
+  badgeSplitBills: {
+    backgroundColor: '#059669',
+  },
+  buttonEmerald: {
+    backgroundColor: '#059669',
+  },
+  billStatsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#0f172a',
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  billStatItem: {
+    alignItems: 'center',
+  },
+  billStatNumber: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#34d399',
+    marginBottom: 2,
+  },
+  billStatLabel: {
+    fontSize: 11,
+    color: '#94a3b8',
+    fontWeight: '600',
+    textTransform: 'uppercase',
   },
 });
 
