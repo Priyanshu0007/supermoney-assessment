@@ -20,7 +20,7 @@ export const AppNavigator: React.FC = () => {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-          animation: 'slide_from_right',
+          animation: 'simple_push',
         }}
       >
         <Stack.Screen
