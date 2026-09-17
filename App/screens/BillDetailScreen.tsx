@@ -2,15 +2,14 @@ import React from 'react';
 import {
   Alert,
   Platform,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import type { RootStackScreenProps } from '../navigation/types';
+import { ScreenContainer } from '../Components';
 import {
   useAppDispatch,
   useAppSelector,
@@ -29,7 +28,7 @@ export const BillDetailScreen: React.FC<RootStackScreenProps<'BillDetail'>> = ({
 
   if (!bill) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <ScreenContainer>
         <View style={styles.notFoundContainer}>
           <Text style={styles.notFoundTitle}>Bill Not Found</Text>
           <TouchableOpacity
@@ -39,7 +38,7 @@ export const BillDetailScreen: React.FC<RootStackScreenProps<'BillDetail'>> = ({
             <Text style={styles.backButtonSimpleText}>← Back to Bills</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </ScreenContainer>
     );
   }
 
@@ -69,8 +68,7 @@ export const BillDetailScreen: React.FC<RootStackScreenProps<'BillDetail'>> = ({
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#0f172a" />
+    <ScreenContainer>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
@@ -232,15 +230,11 @@ export const BillDetailScreen: React.FC<RootStackScreenProps<'BillDetail'>> = ({
           <Text style={styles.deleteButtonText}>🗑️ Delete Bill</Text>
         </TouchableOpacity>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#0f172a',
-  },
   container: {
     flex: 1,
     backgroundColor: '#0f172a',

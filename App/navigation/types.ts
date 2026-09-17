@@ -5,11 +5,6 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
  * Define all screen names along with the types of their route params here.
  */
 export type RootStackParamList = {
-  Home: undefined;
-  Details: {
-    id: string;
-    title: string;
-  };
   BillList: undefined;
   CreateBill: { billId?: string } | undefined;
   SplitResult: { billId: string };

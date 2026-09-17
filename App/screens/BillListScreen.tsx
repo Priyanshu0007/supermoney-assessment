@@ -2,14 +2,13 @@ import React, { useMemo } from 'react';
 import {
   FlatList,
   Platform,
-  SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import type { RootStackScreenProps } from '../navigation/types';
+import { ScreenContainer } from '../Components';
 import {
   useAppSelector,
   useAppDispatch,
@@ -97,10 +96,10 @@ export const BillListScreen: React.FC<RootStackScreenProps<'BillList'>> = ({
               bill.isSettled
                 ? styles.statusSettled
                 : calculation.currentUserOwes
-                ? styles.statusOwes
-                : calculation.currentUserIsOwed
-                ? styles.statusOwed
-                : styles.statusEven,
+                  ? styles.statusOwes
+                  : calculation.currentUserIsOwed
+                    ? styles.statusOwed
+                    : styles.statusEven,
             ]}
           >
             <Text
@@ -109,10 +108,10 @@ export const BillListScreen: React.FC<RootStackScreenProps<'BillList'>> = ({
                 bill.isSettled
                   ? styles.statusSettledText
                   : calculation.currentUserOwes
-                  ? styles.statusOwesText
-                  : calculation.currentUserIsOwed
-                  ? styles.statusOwedText
-                  : styles.statusEvenText,
+                    ? styles.statusOwesText
+                    : calculation.currentUserIsOwed
+                      ? styles.statusOwedText
+                      : styles.statusEvenText,
               ]}
             >
               {calculation.statusText}
@@ -124,7 +123,7 @@ export const BillListScreen: React.FC<RootStackScreenProps<'BillList'>> = ({
             activeOpacity={0.8}
             onPress={() => handleViewBill(bill.id)}
           >
-            <Text style={styles.viewButtonText}>[View]</Text>
+            <Text style={styles.viewButtonText}>View</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -145,52 +144,45 @@ export const BillListScreen: React.FC<RootStackScreenProps<'BillList'>> = ({
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#0f172a" />
-      <View style={styles.container}>
-        {/* Top Header matching wireframe: Split Bills        [+ New] */}
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.headerTitle}>Split Bills</Text>
-            <Text style={styles.headerSubtitle}>Supermoney Expense Ledger</Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.newButton}
-            activeOpacity={0.8}
-            onPress={handleCreateNewBill}
-          >
-            <Text style={styles.newButtonText}>[+ New]</Text>
-          </TouchableOpacity>
+    <ScreenContainer style={styles.container}>
+      {/* Top Header matching wireframe: Split Bills        [+ New] */}
+      <View style={styles.header}>
+        <View>
+          <Text style={styles.headerTitle}>Split Bills</Text>
+          <Text style={styles.headerSubtitle}>Supermoney Expense Ledger</Text>
         </View>
 
-        {/* List of bills */}
-        <FlatList
-          data={billsWithMetrics}
-          keyExtractor={(item) => item.bill.id}
-          renderItem={renderBillCard}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ListFooterComponent={renderFooter}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyTitle}>No bills recorded yet</Text>
-              <Text style={styles.emptySubtitle}>
-                Tap [+ New] to create your first split bill!
-              </Text>
-            </View>
-          }
-        />
+        <TouchableOpacity
+          style={styles.newButton}
+          activeOpacity={0.8}
+          onPress={handleCreateNewBill}
+        >
+          <Text style={styles.newButtonText}>+ New</Text>
+        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+
+      {/* List of bills */}
+      <FlatList
+        data={billsWithMetrics}
+        keyExtractor={(item) => item.bill.id}
+        renderItem={renderBillCard}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        ListFooterComponent={renderFooter}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyTitle}>No bills recorded yet</Text>
+            <Text style={styles.emptySubtitle}>
+              Tap + New to create your first split bill!
+            </Text>
+          </View>
+        }
+      />
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#0f172a',
-  },
   container: {
     flex: 1,
     backgroundColor: '#0f172a',

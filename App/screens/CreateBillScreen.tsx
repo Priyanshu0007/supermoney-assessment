@@ -3,9 +3,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -13,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import type { RootStackScreenProps } from '../navigation/types';
+import { ScreenContainer } from '../Components';
 import {
   useAppDispatch,
   useAppSelector,
@@ -286,8 +285,7 @@ export const CreateBillScreen: React.FC<RootStackScreenProps<'CreateBill'>> = ({
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#0f172a" />
+    <ScreenContainer>
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -601,15 +599,11 @@ export const CreateBillScreen: React.FC<RootStackScreenProps<'CreateBill'>> = ({
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#0f172a',
-  },
   keyboardAvoid: {
     flex: 1,
   },

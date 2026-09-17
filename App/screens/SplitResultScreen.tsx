@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import {
   Alert,
   Platform,
-  SafeAreaView,
   ScrollView,
   Share,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import type { RootStackScreenProps } from '../navigation/types';
+import { ScreenContainer } from '../Components';
 import {
   useAppDispatch,
   useAppSelector,
@@ -34,7 +33,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
 
   if (!bill || !calculation) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <ScreenContainer>
         <View style={styles.notFoundContainer}>
           <Text style={styles.notFoundTitle}>Bill Not Found</Text>
           <TouchableOpacity
@@ -44,7 +43,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
             <Text style={styles.backButtonSimpleText}>← Back to Bills</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </ScreenContainer>
     );
   }
 
@@ -56,15 +55,14 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
     try {
       const transactionsText = calculation.transactions.length
         ? calculation.transactions
-            .map((t) => `• ${t.fromName} owes ${t.toName}: Rs.${t.amount}`)
-            .join('\n')
+          .map((t) => `• ${t.fromName} owes ${t.toName}: Rs.${t.amount}`)
+          .join('\n')
         : 'All balances settled!';
 
       const breakdownsText = calculation.breakdowns
         .map(
           (b) =>
-            `• ${b.displayName}: Paid Rs.${b.paid}, Share Rs.${b.share}, Net: ${
-              b.net > 0 ? `+Rs.${b.net}` : b.net < 0 ? `-Rs.${Math.abs(b.net)}` : 'Rs.0'
+            `• ${b.displayName}: Paid Rs.${b.paid}, Share Rs.${b.share}, Net: ${b.net > 0 ? `+Rs.${b.net}` : b.net < 0 ? `-Rs.${Math.abs(b.net)}` : 'Rs.0'
             }`
         )
         .join('\n');
@@ -83,8 +81,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#0f172a" />
+    <ScreenContainer>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
@@ -142,7 +139,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
                   style={[
                     styles.transactionItem,
                     idx < calculation.transactions.length - 1 &&
-                      styles.transactionItemBorder,
+                    styles.transactionItemBorder,
                   ]}
                 >
                   <View style={styles.transactionNamesCol}>
@@ -168,7 +165,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
           >
             <Text style={styles.sectionTitle}>Per Person Breakdown</Text>
             <Text style={styles.expandToggleText}>
-              {isBreakdownExpanded ? '[ ^ ]' : '[ v ]'}
+              {isBreakdownExpanded ? '⬆️' : '⬇️'}
             </Text>
           </TouchableOpacity>
 
@@ -216,8 +213,8 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
                           {isOwed
                             ? `+Rs.${person.net.toLocaleString('en-IN')}  (owed to you)`
                             : owes
-                            ? `-Rs.${Math.abs(person.net).toLocaleString('en-IN')}  (owes)`
-                            : `Rs.0  (settled)`}
+                              ? `-Rs.${Math.abs(person.net).toLocaleString('en-IN')}  (owes)`
+                              : `Rs.0  (settled)`}
                         </Text>
                       </View>
                     </View>
@@ -248,7 +245,7 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
             activeOpacity={0.8}
             onPress={handleShareSummary}
           >
-            <Text style={styles.actionBtnText}>[ Share ]</Text>
+            <Text style={styles.actionBtnText}>Share</Text>
           </TouchableOpacity>
         </View>
 
@@ -263,15 +260,11 @@ export const SplitResultScreen: React.FC<RootStackScreenProps<'SplitResult'>> = 
           </Text>
         </TouchableOpacity>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#0f172a',
-  },
   container: {
     flex: 1,
     backgroundColor: '#0f172a',
@@ -372,7 +365,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   expandToggleText: {
-    fontSize: 14,
+    fontSize: 24,
     color: '#38bdf8',
     fontWeight: '700',
   },

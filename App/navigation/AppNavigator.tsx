@@ -2,8 +2,6 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { RootStackParamList } from './types';
-import { HomeScreen } from '../screens/HomeScreen';
-import { DetailsScreen } from '../screens/DetailsScreen';
 import { BillListScreen } from '../screens/BillListScreen';
 import { CreateBillScreen } from '../screens/CreateBillScreen';
 import { SplitResultScreen } from '../screens/SplitResultScreen';
@@ -27,16 +25,6 @@ export const AppNavigator: React.FC = () => {
           animation: 'simple_push',
         }}
       >
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Overview' }}
-        />
-        <Stack.Screen
-          name="Details"
-          component={DetailsScreen}
-          options={{ title: 'Item Details' }}
-        />
         <Stack.Screen
           name="BillList"
           component={BillListScreen}
